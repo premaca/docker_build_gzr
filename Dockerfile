@@ -13,6 +13,9 @@ ENV \
 # Extra include PATH, it may not include /usr/local/(s)bin on some systems
     PATH=$PATH:/usr/local/bin/
 
+# Update sources for bionic
+RUN printf "deb http://cz.archive.ubuntu.com/ubuntu trusty main" >> /etc/apt/sources.list
+
 RUN sed -i 's/main$/main universe/' /etc/apt/sources.list \
  && export DEBIAN_FRONTEND=noninteractive \
  && apt-get update \
