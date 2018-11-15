@@ -4,8 +4,14 @@ set -euo pipefail
 
 cd $(dirname $0)
 
-SOURCE=$(pwd)/android
-CCACHE=$(pwd)/ccache
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# SET THE VARIABLES
+
+SOURCE_DIR=/shared/Android/Gzosp
+CCACHE_DIR=/shared/Android/.gzcc
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
 CONTAINER_HOME=/home/build
 CONTAINER=gzosp
 REPOSITORY=docker_build_gzosp
@@ -37,8 +43,8 @@ done
 # Although Docker would create non-existing directories on the fly,
 # we need to have them owned by the user (and not root), to be able
 # to write in them, which is a necessity for startup.sh
-mkdir -p $SOURCE
-mkdir -p $CCACHE
+mkdir -p $SOURCE_DIR
+mkdir -p $CCACHE_DIR
 
 command -v docker >/dev/null \
 	|| { echo "command 'docker' not found."; exit 1; }
@@ -67,7 +73,7 @@ if [[ $IS_RUNNING == "true" ]]; then
 elif [[ $IS_RUNNING == "false" ]]; then
 	docker start -i $CONTAINER
 else
-	docker run $PRIVILEGED -v $SOURCE:$CONTAINER_HOME/android:Z -v $CCACHE:/srv/ccache:Z -i -t $ENVIRONMENT --name $CONTAINER $REPOSITORY:$TAG
+	docker run $PRIVILEGED -v $SOURCE_DIR:$CONTAINER_HOME/android:Z -v $CCACHE_DIR:/srv/ccache:Z -i -t $ENVIRONMENT --name $CONTAINER $REPOSITORY:$TAG
 fi
 
 exit $?

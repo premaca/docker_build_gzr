@@ -3,9 +3,8 @@
 FROM ubuntu:18.04
 MAINTAINER Prema Chand Alugu <premaca@gmail.com>
 
-
 ENV \
-# ccache specifics
+# Build environments
     CCACHE_SIZE=50G \
     CCACHE_DIR=/srv/ccache \
     USE_CCACHE=1 \
