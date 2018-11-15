@@ -1,7 +1,7 @@
-# Build environment for LineageOS
+# Build environment for GZOSP
 
-FROM ubuntu:16.04
-MAINTAINER Michael Stucki <michael@stucki.io>
+FROM ubuntu:18.04
+MAINTAINER Prema Chand Alugu <premaca@gmail.com>
 
 
 ENV \
@@ -18,12 +18,12 @@ RUN sed -i 's/main$/main universe/' /etc/apt/sources.list \
  && apt-get update \
  && apt-get upgrade -y \
  && apt-get install -y \
-# Install build dependencies (source: https://wiki.cyanogenmod.org/w/Build_for_bullhead)
+# Install build dependencies
       bison \
       build-essential \
       curl \
       flex \
-      git \
+      git-core \
       gnupg \
       gperf \
       libesd0-dev \
@@ -34,7 +34,6 @@ RUN sed -i 's/main$/main universe/' /etc/apt/sources.list \
       libxml2 \
       libxml2-utils \
       lzop \
-      maven \
       openjdk-8-jdk \
       pngcrush \
       schedtool \
@@ -57,13 +56,16 @@ RUN sed -i 's/main$/main universe/' /etc/apt/sources.list \
       ccache \
       file \
       imagemagick \
+      libssl-dev \
       nano \
+      python \
       rsync \
       screen \
       sudo \
       tig \
       vim \
       wget \
+      yasm \
  && rm -rf /var/lib/apt/lists/*
 
 ARG hostuid=1000
