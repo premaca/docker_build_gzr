@@ -7,9 +7,9 @@ cd $(dirname $0)
 SOURCE=$(pwd)/android
 CCACHE=$(pwd)/ccache
 CONTAINER_HOME=/home/build
-CONTAINER=lineageos
-REPOSITORY=stucki/lineageos
-TAG=cm-14.1
+CONTAINER=gzosp
+REPOSITORY=GZOSP/docker_build_gzosp
+TAG=9.0
 FORCE_BUILD=0
 PRIVILEGED=
 ENVIRONMENT=
