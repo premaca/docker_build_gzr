@@ -88,6 +88,8 @@ RUN echo "build ALL=NOPASSWD: ALL" > /etc/sudoers.d/build
 ADD startup.sh /home/build/startup.sh
 RUN chmod a+x /home/build/startup.sh
 
+COPY screenrc /home/build/.screenrc
+
 # Fix ownership
 RUN chown -R build:build /home/build
 
