@@ -9,6 +9,8 @@ cd $(dirname $0)
 
 SOURCE_DIR=/shared/Android/Gzosp
 CCACHE_DIR=/shared/Android/.gzcc
+CCACHE_SIZE=50G
+MAKE_JOBS=8
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
@@ -57,6 +59,8 @@ if [[ $FORCE_BUILD = 1 ]] || ! docker inspect $REPOSITORY:$TAG &>/dev/null; then
 		-t $REPOSITORY:$TAG \
 		--build-arg hostuid=$(id -u) \
 		--build-arg hostgid=$(id -g) \
+		--build-arg ccache_size=$CCACHE_SIZE \
+		--build-arg make_jobs=$MAKE_JOBS \
 		.
 
 	# After successful build, delete existing containers

@@ -3,12 +3,16 @@
 FROM ubuntu:18.04
 MAINTAINER Prema Chand Alugu <premaca@gmail.com>
 
+ARG ccache_size
+ARG make_jobs
+
 ENV \
 # Build environments
-    CCACHE_SIZE=50G \
+    CCACHE_SIZE=$ccache_size \
     CCACHE_DIR=/srv/ccache \
     USE_CCACHE=1 \
     CCACHE_COMPRESS=1 \
+    MAKE_JOBS=$make_jobs \
 # Extra include PATH, it may not include /usr/local/(s)bin on some systems
     PATH=$PATH:/usr/local/bin/
 
