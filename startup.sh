@@ -6,6 +6,10 @@ if [ ! -f ${CCACHE_DIR}/ccache.conf ]; then
         ccache -M ${CCACHE_SIZE}
 fi
 
+# Setup the output directory
+echo "Setting output directory to ${OUT_DIR}"
+export OUT_DIR_COMMON_BASE=${OUT_DIR}
+
 # in Docker, the USER variable is unset by default
 # but some programs (like jack toolchain) rely on it
 export USER="$(whoami)"

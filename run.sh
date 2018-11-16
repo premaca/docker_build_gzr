@@ -8,6 +8,7 @@ cd $(dirname $0)
 # SET THE VARIABLES
 
 SOURCE_DIR=/shared/Android/Gzosp
+OUT_DIR=$SOURCE_DIR/out
 CCACHE_DIR=/shared/Android/.gzcc
 CCACHE_SIZE=50G
 MAKE_JOBS=8
@@ -47,6 +48,7 @@ done
 # to write in them, which is a necessity for startup.sh
 mkdir -p $SOURCE_DIR
 mkdir -p $CCACHE_DIR
+mkdir -p $OUT_DIR
 
 command -v docker >/dev/null \
 	|| { echo "command 'docker' not found."; exit 1; }
@@ -61,6 +63,7 @@ if [[ $FORCE_BUILD = 1 ]] || ! docker inspect $REPOSITORY:$TAG &>/dev/null; then
 		--build-arg hostgid=$(id -g) \
 		--build-arg ccache_size=$CCACHE_SIZE \
 		--build-arg make_jobs=$MAKE_JOBS \
+		--build-arg out_dir=$OUT_DIR \
 		.
 
 	# After successful build, delete existing containers
@@ -77,7 +80,7 @@ if [[ $IS_RUNNING == "true" ]]; then
 elif [[ $IS_RUNNING == "false" ]]; then
 	docker start -i $CONTAINER
 else
-	docker run $PRIVILEGED -v $SOURCE_DIR:$CONTAINER_HOME/android:Z -v $CCACHE_DIR:/srv/ccache:Z -i -t $ENVIRONMENT --name $CONTAINER $REPOSITORY:$TAG
+	docker run $PRIVILEGED -v $SOURCE_DIR:$CONTAINER_HOME/android:Z -v $OUT_DIR:$CONTAINER_HOME/out:Z -v $CCACHE_DIR:/srv/ccache:Z -i -t $ENVIRONMENT --name $CONTAINER $REPOSITORY:$TAG
 fi
 
 exit $?

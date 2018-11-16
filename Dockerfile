@@ -5,6 +5,7 @@ MAINTAINER Prema Chand Alugu <premaca@gmail.com>
 
 ARG ccache_size
 ARG make_jobs
+ARG out_dir
 
 ENV \
 # Build environments
@@ -13,6 +14,7 @@ ENV \
     USE_CCACHE=1 \
     CCACHE_COMPRESS=1 \
     MAKE_JOBS=$make_jobs \
+    OUT_DIR=$out_dir \
 # Extra include PATH, it may not include /usr/local/(s)bin on some systems
     PATH=$PATH:/usr/local/bin/
 
@@ -97,9 +99,10 @@ COPY screenrc /home/build/.screenrc
 RUN chown -R build:build /home/build
 
 VOLUME /home/build/android
+VOLUME /home/build/out
 VOLUME /srv/ccache
 
 USER build
-WORKDIR /home/build/android
+WORKDIR /home/build
 
 CMD /home/build/startup.sh
