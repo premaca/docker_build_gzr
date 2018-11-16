@@ -94,6 +94,7 @@ ADD startup.sh /home/build/startup.sh
 RUN chmod a+x /home/build/startup.sh
 
 COPY screenrc /home/build/.screenrc
+COPY build_me.sh /home/build/build_me.sh
 
 # Fix ownership
 RUN chown -R build:build /home/build
