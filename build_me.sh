@@ -95,13 +95,13 @@ function build_me {
     fi
 
     ## lunch the device
-    echo -e "build_me: $bold ... Set Environment and Lunch : gzosp_$DEVICE-userdebug" $nocol
-    exec_command source build/envsetup.sh; lunch gzosp_$DEVICE-userdebug
+    echo -e "build_me: $bold ... Set Environment and Lunch : ${BUILD_TYPE}_$DEVICE-userdebug" $nocol
+    exec_command source build/envsetup.sh; lunch ${BUILD_TYPE}_$DEVICE-userdebug
 
     ## make the device
     echo -e "build_me: $bold ... Clean Installs and Execute Make ...." $nocol
     exec_command make installclean
-    exec_command make -j$MAKE_JOBS gzosp
+    exec_command make -j$MAKE_JOBS ${BUILD_TYPE}
     if [ "$?" -ne 0 ]; then
         echo -e "build_me: $bold Build for $DEVICE FAILED !!!!" $nocol
         build_status=1
@@ -131,9 +131,9 @@ function build_me {
 #### Control Builds and Statuses
 function prepare_builds {
 
-    ### Build Gzosp
-    echo -e "$bold PREPARING GZOSP for $DEVICE ....." $nocol
-    build_me $DEVICE gzosp
+    ### Build it
+    echo -e "$bold PREPARING ${BUILD_TYPE} for $DEVICE ....." $nocol
+    build_me $DEVICE ${BUILD_TYPE}
     RETURN_VALUE="$?"
     if [ "$RETURN_VALUE" -ne 0 ]; then
         GZ_FAILED='!! FAIL !!'

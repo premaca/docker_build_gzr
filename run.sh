@@ -4,21 +4,36 @@ set -euo pipefail
 
 cd $(dirname $0)
 
-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-# SET THE VARIABLES
-
-SOURCE_DIR=/shared/Android/Gzosp
-OUT_DIR=$SOURCE_DIR/out
-CCACHE_DIR=/shared/Android/.gzcc
+#@@@@@@@@@@@@@@@@@ SET THE BELOW VALUES PER NEEDS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# COMMON VARIABLES
 CCACHE_SIZE=50G
 MAKE_JOBS=8
-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# +-----------------------------------------------+
+# BUILD TYPE - gzosp/validus
+BUILD_TYPE=gzosp
+# +-----------------------------------------------+
+# BUILD TYPE VARIABLES
+# +-----------------------------------------------+
+if [[ $BUILD_TYPE == "gzosp" ]]; then
+    CONTAINER=gzosp
+    TAG=9.0
+    SOURCE_DIR=/shared/Android/Gzosp
+    OUT_DIR=$SOURCE_DIR/out
+    CCACHE_DIR=/shared/Android/.gzcc
+elif [[ $BUILD_TYPE == "validus" ]]; then
+    CONTAINER=validus
+    TAG=9.0
+    SOURCE_DIR=/shared/Android/Val
+    OUT_DIR=$SOURCE_DIR/out
+    CCACHE_DIR=/shared/Android/.valcc
+else
+    echo "BUILD_TYPE must be set."; exit 1;
+fi
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
 CONTAINER_HOME=/home/build
-CONTAINER=gzosp
-REPOSITORY=docker_build_gzosp
-TAG=9.0
+REPOSITORY=docker_build_gzr
 FORCE_BUILD=0
 PRIVILEGED=
 ENVIRONMENT=
@@ -64,6 +79,7 @@ if [[ $FORCE_BUILD = 1 ]] || ! docker inspect $REPOSITORY:$TAG &>/dev/null; then
 		--build-arg ccache_size=$CCACHE_SIZE \
 		--build-arg make_jobs=$MAKE_JOBS \
 		--build-arg out_dir=$OUT_DIR \
+		--build-arg build_type=$BUILD_TYPE \
 		.
 
 	# After successful build, delete existing containers
