@@ -67,7 +67,7 @@ function exec_command {
 
 #### Sync the repo
 function repo_sync {
-    exec_command repo init -u ${REPO_URL} -b ${REPO_BRANCH}
+    exec_command repo init -u ${REP_URL} -b ${REP_BRANCH}
     exec_command repo sync -c -j18 --force-sync --no-clone-bundle --no-tags
 }
 
@@ -90,7 +90,8 @@ function build_me {
     echo -e "build_me: $bold ... Exporting Common Output directory to $BASE_OUT_DIR/$DEVICE" $nocol
     export OUT_DIR_COMMON_BASE=$BASE_OUT_DIR/$DEVICE
 
-    echo -e "build_me: $bold ... Entering source directory=$SRC_DIR" $nocol
+    echo -e "build_me: $bold ... Entering source directory=$SRC_DIR, create if one doesn't exit for sync" $nocol
+    exec_command mkdir -p $SRC_DIR
     exec_command cd $SRC_DIR
 
     ## sync build

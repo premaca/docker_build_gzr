@@ -22,8 +22,8 @@ ENV \
     OUT_DIR=$out_dir \
     BUILD_TYPE=$build_type \
     BUILD_DIR=$build_dir \
-    REPO_URL=$repo_url \
-    REPO_BRANCH=$repo_branch \
+    REP_URL=$repo_url \
+    REP_BRANCH=$repo_branch \
     BUILD_VARIANT=$build_variant \
 # Extra include PATH, it may not include /usr/local/(s)bin on some systems
     PATH=$PATH:/usr/local/bin/

@@ -21,13 +21,13 @@ CCACHE_DIR=/shared/Android/CCACHE
 if [[ $BUILD_TYPE == "gzosp" ]]; then
     BUILD_DIR=Gzosp # inside BASE_SRC_DIR
     OUT_DIR=$BASE_SRC_DIR/out
-    REPO_URL="https://github.com/GZOSP/manifest.git"
-    REPO_BRANCH="9.0"
+    REP_URL="https://github.com/GZOSP/manifest.git"
+    REP_BRANCH="9.0"
 elif [[ $BUILD_TYPE == "validus" ]]; then
     BUILD_DIR=Val # inside BASE_SRC_DIR
     OUT_DIR=$BASE_SRC_DIR/out
-    REPO_URL="https://github.com/ValidusOS/manifest.git"
-    REPO_BRANCH="9.0"
+    REP_URL="https://github.com/ValidusOS/manifest.git"
+    REP_BRANCH="9.0"
 else
     echo "BUILD_TYPE must be set."; exit 1;
 fi
@@ -68,11 +68,11 @@ command -v docker >/dev/null \
         || { echo "command 'docker' not found."; exit 1; }
 
 # Build image if needed
-if [[ $FORCE_BUILD = 1 ]] || ! docker inspect $REPOSITORY:$REPO_BRANCH &>/dev/null; then
+if [[ $FORCE_BUILD = 1 ]] || ! docker inspect $REPOSITORY:$REP_BRANCH &>/dev/null; then
 
         docker build \
             --pull \
-            -t $REPOSITORY:$REPO_BRANCH \
+            -t $REPOSITORY:$REP_BRANCH \
             --build-arg hostuid=$(id -u) \
             --build-arg hostgid=$(id -g) \
             --build-arg ccache_size=$CCACHE_SIZE \
@@ -80,8 +80,8 @@ if [[ $FORCE_BUILD = 1 ]] || ! docker inspect $REPOSITORY:$REPO_BRANCH &>/dev/nu
             --build-arg out_dir=$OUT_DIR \
             --build-arg build_type=$BUILD_TYPE \
             --build-arg build_dir=$BUILD_DIR \
-            --build-arg repo_url=$REPO_URL \
-            --build-arg repo_branch=$REPO_BRANCH \
+            --build-arg repo_url=$REP_URL \
+            --build-arg repo_branch=$REP_BRANCH \
             --build-arg build_variant=$BUILD_VARIANT \
             .
 
@@ -99,7 +99,7 @@ if [[ $IS_RUNNING == "true" ]]; then
 elif [[ $IS_RUNNING == "false" ]]; then
     docker start -i $CONTAINER
 else
-    docker run $PRIVILEGED -v $BASE_SRC_DIR:$CONTAINER_HOME/android:Z -v $OUT_DIR:$CONTAINER_HOME/out:Z -v $CCACHE_DIR:/srv/ccache:Z -i -t $ENVIRONMENT --name $CONTAINER $REPOSITORY:$REPO_BRANCH
+    docker run $PRIVILEGED -v $BASE_SRC_DIR:$CONTAINER_HOME/android:Z -v $OUT_DIR:$CONTAINER_HOME/out:Z -v $CCACHE_DIR:/srv/ccache:Z -i -t $ENVIRONMENT --name $CONTAINER $REPOSITORY:$REP_BRANCH
 fi
 
 exit $?
