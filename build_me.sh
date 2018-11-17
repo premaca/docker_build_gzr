@@ -101,7 +101,7 @@ function build_me {
     ## set up CCACHE
     echo -e "build_me: $bold ... Setting up ccache to 50G in $CACHE_DIR" $nocol
     exec_command export CCACHE_DIR=$CACHE_DIR
-    exec_command ccache -M 50G
+    exec_command ccache -M ${CCACHE_SIZE}
     if [ "$CLEAN_CCACHE" == "YES" ]; then
         exec_command export CCACHE_DIR=$CACHE_DIR
         echo -e "build_me: $bold ... Clearing up ccache $CACHE_DIR" $nocol
