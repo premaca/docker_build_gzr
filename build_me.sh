@@ -16,6 +16,7 @@
 ## common directories - mounted through docker
 BASE_SRC_DIR="$HOME/android"
 BASE_OUT_DIR="$HOME/out"
+BUILD_DATE=$(date +"%Y%m%d")
 
 #@@@@@@@@@@@@@@@@@@ VARIABLES @@@@@@@@@@@@@@@@@@@@@@@@@@#
 
@@ -140,7 +141,7 @@ function build_me {
     fi
 
     ## Check build status
-    echo -e "Build completed. Check Zip File: $OUT_DIR/out/target/product/$DEVICE/[A-Za-z]*-$DEVICE-[A-Za-z0-9]*-$BUILD_DATE-*.zip"
+    echo -e "Build completed. Check Zip File: $OUT_DIR/target/product/$DEVICE/[A-Za-z]*-$DEVICE-[A-Za-z0-9]*-$BUILD_DATE-*.zip"
     echo -e "build_me: $bold *******************************************************" $nocol
         exec_command ls ${OUT_DIR}/target/product/$DEVICE/[A-Za-z]*-$DEVICE-[A-Za-z0-9]*-$BUILD_DATE-*.zip
     if [ "$?" -ne 0 ]; then
