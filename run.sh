@@ -41,22 +41,19 @@ PRIVILEGED=
 ENVIRONMENT=
 
 while [[ $# > 0 ]]; do
-	key="$1"
-	case $key in
-		-r|--rebuild)
-			FORCE_BUILD=1
-			;;
-		-u|--enable-usb)
-			PRIVILEGED="--privileged -v /dev/bus/usb:/dev/bus/usb"
-			;;
-		-ws|--with-su)
-			ENVIRONMENT="-e WITH_SU=true"
-			;;
-		*)
-			shift # past argument or value
-			;;
-	esac
-	shift
+    key="$1"
+    case $key in
+        -r|--rebuild)
+            FORCE_BUILD=1
+            ;;
+        -u|--enable-usb)
+            PRIVILEGED="--privileged -v /dev/bus/usb:/dev/bus/usb"
+    ;;
+    *)
+        shift # past argument or value
+    ;;
+    esac
+    shift
 done
 
 # Create shared folders
@@ -68,41 +65,41 @@ mkdir -p $CCACHE_DIR
 mkdir -p $OUT_DIR
 
 command -v docker >/dev/null \
-	|| { echo "command 'docker' not found."; exit 1; }
+        || { echo "command 'docker' not found."; exit 1; }
 
 # Build image if needed
 if [[ $FORCE_BUILD = 1 ]] || ! docker inspect $REPOSITORY:$REPO_BRANCH &>/dev/null; then
 
-	docker build \
-		--pull \
-		-t $REPOSITORY:$REPO_BRANCH \
-		--build-arg hostuid=$(id -u) \
-		--build-arg hostgid=$(id -g) \
-		--build-arg ccache_size=$CCACHE_SIZE \
-		--build-arg make_jobs=$MAKE_JOBS \
-		--build-arg out_dir=$OUT_DIR \
-		--build-arg build_type=$BUILD_TYPE \
-		--build-arg build_dir=$BUILD_DIR \
-		--build-arg repo_url=$REPO_URL \
-		--build-arg repo_branch=$REPO_BRANCH \
-		--build-arg build_variant=$BUILD_VARIANT \
-		.
+        docker build \
+            --pull \
+            -t $REPOSITORY:$REPO_BRANCH \
+            --build-arg hostuid=$(id -u) \
+            --build-arg hostgid=$(id -g) \
+            --build-arg ccache_size=$CCACHE_SIZE \
+            --build-arg make_jobs=$MAKE_JOBS \
+            --build-arg out_dir=$OUT_DIR \
+            --build-arg build_type=$BUILD_TYPE \
+            --build-arg build_dir=$BUILD_DIR \
+            --build-arg repo_url=$REPO_URL \
+            --build-arg repo_branch=$REPO_BRANCH \
+            --build-arg build_variant=$BUILD_VARIANT \
+            .
 
-	# After successful build, delete existing containers
-	if docker inspect $CONTAINER &>/dev/null; then
-		docker rm $CONTAINER >/dev/null
-	fi
+# After successful build, delete existing containers
+            if docker inspect $CONTAINER &>/dev/null; then
+                    docker rm $CONTAINER >/dev/null
+            fi
 fi
 
 # With the given name $CONTAINER, reconnect to running container, start
 # an existing/stopped container or run a new one if one does not exist.
 IS_RUNNING=$(docker inspect -f '{{.State.Running}}' $CONTAINER 2>/dev/null) || true
 if [[ $IS_RUNNING == "true" ]]; then
-	docker attach $CONTAINER
+    docker attach $CONTAINER
 elif [[ $IS_RUNNING == "false" ]]; then
-	docker start -i $CONTAINER
+    docker start -i $CONTAINER
 else
-	docker run $PRIVILEGED -v $BASE_SRC_DIR:$CONTAINER_HOME/android:Z -v $OUT_DIR:$CONTAINER_HOME/out:Z -v $CCACHE_DIR:/srv/ccache:Z -i -t $ENVIRONMENT --name $CONTAINER $REPOSITORY:$REPO_BRANCH
+    docker run $PRIVILEGED -v $BASE_SRC_DIR:$CONTAINER_HOME/android:Z -v $OUT_DIR:$CONTAINER_HOME/out:Z -v $CCACHE_DIR:/srv/ccache:Z -i -t $ENVIRONMENT --name $CONTAINER $REPOSITORY:$REPO_BRANCH
 fi
 
 exit $?
