@@ -2,7 +2,7 @@
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#
 #### USAGE:
-#### ./get_build.sh -d <device_name> [clean] [sync]
+#### ./get_build.sh -d <device_name> [clean] [sync] [nocache]
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#
 #####
 ### Prepared by:
@@ -44,7 +44,7 @@ EXIT_ON_FAIL='YES'
 
 #### Usage
 function show_usage {
-    echo -e "$green $bold USAGE: get_build -d <device_name> [clean] [sync] $nocol"
+    echo -e "$green $bold USAGE: get_build -d <device_name> [clean] [sync] [nocache] $nocol"
 }
 
 #### Execute given command, Can EXIT upon fail.
@@ -193,6 +193,10 @@ case $key in
     ;;
     clean)
     CLEAN_BUILD=YES
+    #shift # past argument
+    ;;
+    nocache)
+    CLEAN_CCACHE=YES
     #shift # past argument
     ;;
     -d)
