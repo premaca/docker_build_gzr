@@ -105,6 +105,13 @@ REPO_URL        - URL repo for GZOSP manifest. Default : "https://github.com/Val
 REPO_BRANCH     - Branch of GZOSP repo manifest. Default : "9.0"
 ```
 
+#### Setup GIT details for REPO SYNC and management
+```
+-> You should be inside Docker
+git config --global user.email "yourmailid@domain.com"
+git config --global user.name "Your Name"
+```
+
 #### I'm Noob, Never built
 ```
 - Setup the Ecosystem as explained above
