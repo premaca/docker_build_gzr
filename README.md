@@ -10,6 +10,40 @@ The main working directory is a shared folder on the host system, so the Docker 
 
 **NOTE:** Remember that GZRoms is a huge project. It will consume a large amount of disk space (~80 GB) and it can easily take hours to build.
 
+### Build System Visualizations
+
+### Source directory
+                           BASE_SRC_DIR (e.g /home/premaca/android)
+                                 |
+                   --------------------------------
+                   |                               |
+                Gzosp                            Validus
+
+### Output directory
+                           OUT_DIR (e.g /home/premaca/android/out)
+                                 |
+                   --------------------------------
+                   |             |                |
+                oneplus3      sanders         cheeseburger
+                   |
+           ---------------
+           |             |
+        Gzosp         Validus
+
+### CCACHE directory
+                           CCACHE_DIR (e.g /home/premaca/.ccache)
+                                 |
+                   --------------------------------
+                   |             |                |
+                oneplus3      sanders         cheeseburger
+                   |
+           ---------------
+           |             |
+        Gzosp         Validus
+    ------------
+          |
+     CCACHE DATA
+
 ### How to run/build
 
 **NOTES:**
