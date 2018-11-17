@@ -11,6 +11,7 @@ MAKE_JOBS=8
 # +-----------------------------------------------+
 # BUILD TYPE - gzosp/validus
 BUILD_TYPE=gzosp
+BUILD_VARIANT=OFFICIAL
 # +-----------------------------------------------+
 # BUILD TYPE VARIABLES
 # +-----------------------------------------------+
@@ -84,6 +85,7 @@ if [[ $FORCE_BUILD = 1 ]] || ! docker inspect $REPOSITORY:$REPO_BRANCH &>/dev/nu
 		--build-arg build_dir=$BUILD_DIR \
 		--build-arg repo_url=$REPO_URL \
 		--build-arg repo_branch=$REPO_BRANCH \
+		--build-arg build_variant=$BUILD_VARIANT \
 		.
 
 	# After successful build, delete existing containers

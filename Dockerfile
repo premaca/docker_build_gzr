@@ -10,6 +10,7 @@ ARG build_type
 ARG build_dir
 ARG repo_url
 ARG repo_branch
+ARG build_variant
 
 ENV \
 # Build environments
@@ -23,6 +24,7 @@ ENV \
     BUILD_DIR=$build_dir \
     REPO_URL=$repo_url \
     REPO_BRANCH=$repo_branch \
+    BUILD_VARIANT=$build_variant \
 # Extra include PATH, it may not include /usr/local/(s)bin on some systems
     PATH=$PATH:/usr/local/bin/
 

@@ -115,6 +115,15 @@ function build_me {
         exec_command rm -rf $OUT_DIR
     fi
 
+    ## setup Build Variant
+    if [ "${BUILD_TYPE}" == "gzosp" ]; then
+        export GZOSP_BUILD_TYPE=${BUILD_VARIANT}
+    else if [ "${BUILD_TYPE}" == "validus" ]; then
+        export VALIDUS_BUILD_TYPE=${BUILD_VARIANT}
+    fi
+    fi
+    
+
     ## lunch the device
     echo -e "build_me: $bold ... Set Environment and Lunch : ${BUILD_TYPE}_$DEVICE-userdebug" $nocol
     exec_command source build/envsetup.sh; lunch ${BUILD_TYPE}_$DEVICE-userdebug
