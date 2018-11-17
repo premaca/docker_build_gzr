@@ -7,6 +7,9 @@ ARG ccache_size
 ARG make_jobs
 ARG out_dir
 ARG build_type
+ARG build_dir
+ARG repo_url
+ARG repo_branch
 
 ENV \
 # Build environments
@@ -17,6 +20,9 @@ ENV \
     MAKE_JOBS=$make_jobs \
     OUT_DIR=$out_dir \
     BUILD_TYPE=$build_type \
+    BUILD_DIR=$build_dir \
+    REPO_URL=$repo_url \
+    REPO_BRANCH=$repo_branch \
 # Extra include PATH, it may not include /usr/local/(s)bin on some systems
     PATH=$PATH:/usr/local/bin/
 

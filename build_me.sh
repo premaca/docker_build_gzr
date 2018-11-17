@@ -14,8 +14,8 @@
 #@@@@@@@@@@@@@@@@@@ VARIABLES @@@@@@@@@@@@@@@@@@@@@@@@@@#
 
 ## common directories - mounted through docker
-SRC_DIR="$HOME/android"
-OUT_DIR="$HOME/out"
+BASE_SRC_DIR="$HOME/android"
+BASE_OUT_DIR="$HOME/out"
 
 #@@@@@@@@@@@@@@@@@@ VARIABLES @@@@@@@@@@@@@@@@@@@@@@@@@@#
 
@@ -66,6 +66,7 @@ function exec_command {
 
 #### Sync the repo
 function repo_sync {
+    exec_command repo init -u ${REPO_URL} -b ${REPO_BRANCH}
     exec_command repo sync -c -j18 --force-sync --no-clone-bundle --no-tags
 }
 
@@ -78,7 +79,16 @@ function build_me {
     #### Because we need to continue with other builds given if any
     EXIT_ON_FAIL='NO'
 
-    echo -e "build_me: $bold Build Variables device=$DEVICE SRC_DIR=$SRC_DIR" $nocol
+    ## INITIALIZE variables now
+    SRC_DIR=$BASE_SRC_DIR/${BUILD_DIR}
+    OUT_DIR=$BASE_OUT_DIR/$DEVICE/${BUILD_DIR}
+    CACHE_DIR=${CCACHE_DIR}/$DEVICE/${BUILD_DIR}
+
+    echo -e "build_me: $bold Build Variables device=$DEVICE SRC_DIR=$SRC_DIR CCACHE_DIR=$CACHE_DIR OUT_DIR=${OUT_DIR} " $nocol
+
+    echo -e "build_me: $bold ... Exporting Common Output directory to $BASE_OUT_DIR/$DEVICE" $nocol
+    export OUT_DIR_COMMON_BASE=$BASE_OUT_DIR/$DEVICE
+
     echo -e "build_me: $bold ... Entering source directory=$SRC_DIR" $nocol
     exec_command cd $SRC_DIR
 
@@ -88,10 +98,21 @@ function build_me {
         repo_sync
     fi
 
+    ## set up CCACHE
+    echo -e "build_me: $bold ... Setting up ccache to 50G in $CACHE_DIR" $nocol
+    exec_command export CCACHE_DIR=$CACHE_DIR
+    exec_command ccache -M 50G
+    if [ "$CLEAN_CCACHE" == "YES" ]; then
+        exec_command export CCACHE_DIR=$CACHE_DIR
+        echo -e "build_me: $bold ... Clearing up ccache $CACHE_DIR" $nocol
+        exec_command ccache -C
+        exec_command ccache -z
+    fi
+
     ## clean build
     if [ "$CLEAN_BUILD" == 'YES' ]; then
         echo -e "build_me: $bold ... Cleaning output directory $OUT_DIR" $nocol
-        exec_command rm -rf $OUT_DIR/*
+        exec_command rm -rf $OUT_DIR
     fi
 
     ## lunch the device
@@ -110,7 +131,7 @@ function build_me {
     fi
 
     ## Check build status
-    echo -e "Build completed. Check Zip File: $SRC_DIR/out/target/product/$DEVICE/[A-Za-z]*-$DEVICE-[A-Za-z0-9]*-$BUILD_DATE-*.zip"
+    echo -e "Build completed. Check Zip File: $OUT_DIR/out/target/product/$DEVICE/[A-Za-z]*-$DEVICE-[A-Za-z0-9]*-$BUILD_DATE-*.zip"
     echo -e "build_me: $bold *******************************************************" $nocol
         exec_command ls ${OUT_DIR}/target/product/$DEVICE/[A-Za-z]*-$DEVICE-[A-Za-z0-9]*-$BUILD_DATE-*.zip
     if [ "$?" -ne 0 ]; then

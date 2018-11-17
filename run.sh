@@ -14,18 +14,19 @@ BUILD_TYPE=gzosp
 # +-----------------------------------------------+
 # BUILD TYPE VARIABLES
 # +-----------------------------------------------+
+CONTAINER=gzr
+BASE_SRC_DIR=/shared/Android
+CCACHE_DIR=/shared/Android/CCACHE
 if [[ $BUILD_TYPE == "gzosp" ]]; then
-    CONTAINER=gzosp
-    TAG=9.0
-    SOURCE_DIR=/shared/Android/Gzosp
-    OUT_DIR=$SOURCE_DIR/out
-    CCACHE_DIR=/shared/Android/.gzcc
+    BUILD_DIR=Gzosp # inside BASE_SRC_DIR
+    OUT_DIR=$BASE_SRC_DIR/out
+    REPO_URL="https://github.com/GZOSP/manifest.git"
+    REPO_BRANCH="9.0"
 elif [[ $BUILD_TYPE == "validus" ]]; then
-    CONTAINER=validus
-    TAG=9.0
-    SOURCE_DIR=/shared/Android/Val
-    OUT_DIR=$SOURCE_DIR/out
-    CCACHE_DIR=/shared/Android/.valcc
+    BUILD_DIR=Val # inside BASE_SRC_DIR
+    OUT_DIR=$BASE_SRC_DIR/out
+    REPO_URL="https://github.com/ValidusOS/manifest.git"
+    REPO_BRANCH="9.0"
 else
     echo "BUILD_TYPE must be set."; exit 1;
 fi
@@ -61,7 +62,7 @@ done
 # Although Docker would create non-existing directories on the fly,
 # we need to have them owned by the user (and not root), to be able
 # to write in them, which is a necessity for startup.sh
-mkdir -p $SOURCE_DIR
+mkdir -p $BASE_SRC_DIR
 mkdir -p $CCACHE_DIR
 mkdir -p $OUT_DIR
 
@@ -69,17 +70,20 @@ command -v docker >/dev/null \
 	|| { echo "command 'docker' not found."; exit 1; }
 
 # Build image if needed
-if [[ $FORCE_BUILD = 1 ]] || ! docker inspect $REPOSITORY:$TAG &>/dev/null; then
+if [[ $FORCE_BUILD = 1 ]] || ! docker inspect $REPOSITORY:$REPO_BRANCH &>/dev/null; then
 
 	docker build \
 		--pull \
-		-t $REPOSITORY:$TAG \
+		-t $REPOSITORY:$REPO_BRANCH \
 		--build-arg hostuid=$(id -u) \
 		--build-arg hostgid=$(id -g) \
 		--build-arg ccache_size=$CCACHE_SIZE \
 		--build-arg make_jobs=$MAKE_JOBS \
 		--build-arg out_dir=$OUT_DIR \
 		--build-arg build_type=$BUILD_TYPE \
+		--build-arg build_dir=$BUILD_DIR \
+		--build-arg repo_url=$REPO_URL \
+		--build-arg repo_branch=$REPO_BRANCH \
 		.
 
 	# After successful build, delete existing containers
@@ -96,7 +100,7 @@ if [[ $IS_RUNNING == "true" ]]; then
 elif [[ $IS_RUNNING == "false" ]]; then
 	docker start -i $CONTAINER
 else
-	docker run $PRIVILEGED -v $SOURCE_DIR:$CONTAINER_HOME/android:Z -v $OUT_DIR:$CONTAINER_HOME/out:Z -v $CCACHE_DIR:/srv/ccache:Z -i -t $ENVIRONMENT --name $CONTAINER $REPOSITORY:$TAG
+	docker run $PRIVILEGED -v $BASE_SRC_DIR:$CONTAINER_HOME/android:Z -v $OUT_DIR:$CONTAINER_HOME/out:Z -v $CCACHE_DIR:/srv/ccache:Z -i -t $ENVIRONMENT --name $CONTAINER $REPOSITORY:$REPO_BRANCH
 fi
 
 exit $?
