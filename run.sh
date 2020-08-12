@@ -11,6 +11,10 @@ CONTAINER=gzr
 # Please give absolute path for better results
 BASE_SRC_DIR=$HOME/droid
 # +-----------------------------------------------+
+# GIT user setup
+GIT_USER_NAME="Your Name"
+GIT_USER_EMAIL="you@email.com"
+# +-----------------------------------------------+
 # BUILD TYPE - gzosp/validus/lineage
 BUILD_TYPE=gzosp
 # +-----------------------------------------------+
@@ -72,6 +76,8 @@ if [[ $FORCE_BUILD = 1 ]] || ! docker inspect $REPOSITORY:$REP_BRANCH &>/dev/nul
             --build-arg build_type=$BUILD_TYPE \
             --build-arg repo_url=$REP_URL \
             --build-arg repo_branch=$REP_BRANCH \
+            --build-arg git_uname="$GIT_USER_NAME" \
+            --build-arg git_uemail=${GIT_USER_EMAIL} \
             .
 
 # After successful build, delete existing containers

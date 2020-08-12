@@ -6,6 +6,8 @@ MAINTAINER Prema Chand Alugu <premaca@gmail.com>
 ARG build_type
 ARG repo_url
 ARG repo_branch
+ARG git_uname
+ARG git_uemail
 
 ENV \
 # Build environments
@@ -17,6 +19,8 @@ ENV \
     BUILD_TYPE=$build_type \
     REP_URL=$repo_url \
     REP_BRANCH=$repo_branch \
+    GIT_USER_NAME=$git_uname \
+    GIT_USER_EMAIL=$git_uemail \
 # Extra include PATH, it may not include /usr/local/(s)bin on some systems
     PATH=$PATH:/usr/local/bin/
 
@@ -95,7 +99,6 @@ RUN echo "build ALL=NOPASSWD: ALL" > /etc/sudoers.d/build
 ADD startup.sh /home/build/startup.sh
 RUN chmod a+x /home/build/startup.sh
 
-COPY gitconfig /home/build/.gitconfig
 COPY screenrc /home/build/.screenrc
 COPY bashrc /home/build/bashrc
 COPY build_me.sh /home/build/build_me.sh
