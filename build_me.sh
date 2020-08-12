@@ -81,9 +81,9 @@ function build_me {
     EXIT_ON_FAIL='NO'
 
     ## INITIALIZE variables now
-    SRC_DIR=$BASE_SRC_DIR/${BUILD_DIR}
-    OUT_DIR=$BASE_OUT_DIR/$DEVICE/${BUILD_DIR}
-    CACHE_DIR=${CCACHE_DIR}/$DEVICE/${BUILD_DIR}
+    SRC_DIR=$BASE_SRC_DIR/${BUILD_TYPE}
+    OUT_DIR=$BASE_OUT_DIR/$DEVICE/${BUILD_TYPE}
+    CACHE_DIR=${CCACHE_DIR}/$DEVICE/${BUILD_TYPE}
 
     echo -e "build_me: $bold Build Variables device=$DEVICE SRC_DIR=$SRC_DIR CCACHE_DIR=$CACHE_DIR OUT_DIR=${OUT_DIR} " $nocol
 
@@ -103,7 +103,7 @@ function build_me {
     ## set up CCACHE
     echo -e "build_me: $bold ... Setting up ccache to 50G in $CACHE_DIR" $nocol
     exec_command export CCACHE_DIR=$CACHE_DIR
-    exec_command ccache -M ${CCACHE_SIZE}
+    exec_command ccache -M 50G
     if [ "$CLEAN_CCACHE" == "YES" ]; then
         exec_command export CCACHE_DIR=$CACHE_DIR
         echo -e "build_me: $bold ... Clearing up ccache $CACHE_DIR" $nocol
@@ -122,9 +122,10 @@ function build_me {
     exec_command source build/envsetup.sh; lunch ${BUILD_TYPE}_$DEVICE-userdebug
 
     ## make the device
-    echo -e "build_me: $bold ... Clean Installs and Execute Make ...." $nocol
+    make_jobs=`grep processor /proc/cpuinfo | wc -l`
+    echo -e "build_me: $bold ... Clean Installs and Execute Make (jobs=$make_jobs)...." $nocol
     exec_command make installclean
-    exec_command make -j$MAKE_JOBS ${BUILD_TYPE}
+    exec_command make -j$make_jobs ${BUILD_TYPE}
     if [ "$?" -ne 0 ]; then
         echo -e "build_me: $bold Build for $DEVICE FAILED !!!!" $nocol
         build_status=1

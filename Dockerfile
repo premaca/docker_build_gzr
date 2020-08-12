@@ -3,24 +3,18 @@
 FROM ubuntu:18.04
 MAINTAINER Prema Chand Alugu <premaca@gmail.com>
 
-ARG ccache_size
-ARG make_jobs
 ARG out_dir
 ARG build_type
-ARG build_dir
 ARG repo_url
 ARG repo_branch
 
 ENV \
 # Build environments
-    CCACHE_SIZE=$ccache_size \
     CCACHE_DIR=/srv/ccache \
     USE_CCACHE=1 \
     CCACHE_COMPRESS=1 \
-    MAKE_JOBS=$make_jobs \
-    OUT_DIR=$out_dir \
+    OUT_DIR="$HOME/out" \
     BUILD_TYPE=$build_type \
-    BUILD_DIR=$build_dir \
     REP_URL=$repo_url \
     REP_BRANCH=$repo_branch \
 # Extra include PATH, it may not include /usr/local/(s)bin on some systems

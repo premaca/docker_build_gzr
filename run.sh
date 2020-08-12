@@ -4,32 +4,23 @@ set -euo pipefail
 
 cd $(dirname $0)
 
+CONTAINER=gzr
+
 #@@@@@@@@@@@@@@@@@ SET THE BELOW VALUES PER NEEDS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-# COMMON VARIABLES
-CCACHE_SIZE=50G
-MAKE_JOBS=8
 # +-----------------------------------------------+
-# BUILD TYPE - gzosp/validus
+# Please give absolute path for better results
+BASE_SRC_DIR=/shared/Android
+# +-----------------------------------------------+
+# BUILD TYPE - gzosp/validus/lineage
 BUILD_TYPE=gzosp
 # +-----------------------------------------------+
-# BUILD TYPE VARIABLES
+# Repository Details
+REP_URL="https://github.com/GZOSP/manifest.git"
+REP_BRANCH="9.0"
 # +-----------------------------------------------+
-CONTAINER=gzr
-BASE_SRC_DIR=/shared/Android
-CCACHE_DIR=/shared/Android/CCACHE
-if [[ $BUILD_TYPE == "gzosp" ]]; then
-    BUILD_DIR=Gzosp # inside BASE_SRC_DIR
-    OUT_DIR=$BASE_SRC_DIR/out
-    REP_URL="https://github.com/GZOSP/manifest.git"
-    REP_BRANCH="9.0"
-elif [[ $BUILD_TYPE == "validus" ]]; then
-    BUILD_DIR=Val # inside BASE_SRC_DIR
-    OUT_DIR=$BASE_SRC_DIR/out
-    REP_URL="https://github.com/ValidusOS/manifest.git"
-    REP_BRANCH="9.0"
-else
-    echo "BUILD_TYPE must be set."; exit 1;
-fi
+# Possible Exports
+CCACHE_DIR=$BASE_SRC_DIR/CCACHE
+OUT_DIR=$BASE_SRC_DIR/out
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
@@ -74,11 +65,7 @@ if [[ $FORCE_BUILD = 1 ]] || ! docker inspect $REPOSITORY:$REP_BRANCH &>/dev/nul
             -t $REPOSITORY:$REP_BRANCH \
             --build-arg hostuid=$(id -u) \
             --build-arg hostgid=$(id -g) \
-            --build-arg ccache_size=$CCACHE_SIZE \
-            --build-arg make_jobs=$MAKE_JOBS \
-            --build-arg out_dir=$OUT_DIR \
             --build-arg build_type=$BUILD_TYPE \
-            --build-arg build_dir=$BUILD_DIR \
             --build-arg repo_url=$REP_URL \
             --build-arg repo_branch=$REP_BRANCH \
             .
