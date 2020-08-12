@@ -16,6 +16,7 @@
 ## common directories - mounted through docker
 BASE_SRC_DIR="$HOME/android"
 BASE_OUT_DIR="$HOME/out"
+CODE_DIR="$HOME/code"
 BUILD_DATE=$(date +"%Y%m%d")
 
 #@@@@@@@@@@@@@@@@@@ VARIABLES @@@@@@@@@@@@@@@@@@@@@@@@@@#
@@ -81,7 +82,7 @@ function build_me {
     EXIT_ON_FAIL='NO'
 
     ## INITIALIZE variables now
-    SRC_DIR=$BASE_SRC_DIR/${BUILD_TYPE}
+    SRC_DIR=$CODE_DIR
     OUT_DIR=$BASE_OUT_DIR/$DEVICE/${BUILD_TYPE}
     CACHE_DIR=${CCACHE_DIR}/$DEVICE/${BUILD_TYPE}
 

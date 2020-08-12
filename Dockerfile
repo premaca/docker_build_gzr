@@ -3,7 +3,6 @@
 FROM ubuntu:18.04
 MAINTAINER Prema Chand Alugu <premaca@gmail.com>
 
-ARG out_dir
 ARG build_type
 ARG repo_url
 ARG repo_branch
@@ -14,6 +13,7 @@ ENV \
     USE_CCACHE=1 \
     CCACHE_COMPRESS=1 \
     OUT_DIR="$HOME/out" \
+    CODE_DIR="$HOME/code" \
     BUILD_TYPE=$build_type \
     REP_URL=$repo_url \
     REP_BRANCH=$repo_branch \
@@ -105,6 +105,7 @@ RUN chown -R build:build /home/build
 
 VOLUME /home/build/android
 VOLUME /home/build/out
+VOLUME /home/build/code
 VOLUME /srv/ccache
 
 USER build

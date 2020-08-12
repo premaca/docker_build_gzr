@@ -9,7 +9,7 @@ CONTAINER=gzr
 #@@@@@@@@@@@@@@@@@ SET THE BELOW VALUES PER NEEDS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 # +-----------------------------------------------+
 # Please give absolute path for better results
-BASE_SRC_DIR=/shared/Android
+BASE_SRC_DIR=$HOME/droid
 # +-----------------------------------------------+
 # BUILD TYPE - gzosp/validus/lineage
 BUILD_TYPE=gzosp
@@ -21,6 +21,9 @@ REP_BRANCH="9.0"
 # Possible Exports
 CCACHE_DIR=$BASE_SRC_DIR/CCACHE
 OUT_DIR=$BASE_SRC_DIR/out
+# +-----------------------------------------------+
+# Source code
+CODE_DIR=$BASE_SRC_DIR/$BUILD_TYPE
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
@@ -53,6 +56,7 @@ done
 mkdir -p $BASE_SRC_DIR
 mkdir -p $CCACHE_DIR
 mkdir -p $OUT_DIR
+mkdir -p $CODE_DIR
 
 command -v docker >/dev/null \
         || { echo "command 'docker' not found."; exit 1; }
@@ -84,7 +88,11 @@ if [[ $IS_RUNNING == "true" ]]; then
 elif [[ $IS_RUNNING == "false" ]]; then
     docker start -i $CONTAINER
 else
-    docker run $PRIVILEGED -v $BASE_SRC_DIR:$CONTAINER_HOME/android:Z -v $OUT_DIR:$CONTAINER_HOME/out:Z -v $CCACHE_DIR:/srv/ccache:Z -i -t $ENVIRONMENT --name $CONTAINER $REPOSITORY:$REP_BRANCH
+    docker run $PRIVILEGED -v $BASE_SRC_DIR:$CONTAINER_HOME/android:Z \
+                           -v $CODE_DIR:$CONTAINER_HOME/code:Z \
+                           -v $OUT_DIR:$CONTAINER_HOME/out:Z \
+                           -v $CCACHE_DIR:/srv/ccache:Z \
+                           -i -t $ENVIRONMENT --name $CONTAINER $REPOSITORY:$REP_BRANCH
 fi
 
 exit $?
