@@ -94,6 +94,7 @@ function build_me {
     echo -e "build_me: $bold ... Setting up GIT for $GIT_USER_NAME/$GIT_USER_EMAIL " $nocol
     git config --global user.name "$GIT_USER_NAME"
     git config --global user.email $GIT_USER_EMAIL
+    git config --global color.ui auto
 
     echo -e "build_me: $bold ... Entering source directory=$SRC_DIR, create if one doesn't exit for sync" $nocol
     exec_command mkdir -p $SRC_DIR
