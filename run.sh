@@ -20,7 +20,7 @@ BUILD_TYPE=gzosp
 # +-----------------------------------------------+
 # Repository Details
 REP_URL="https://github.com/GZOSP/manifest.git"
-REP_BRANCH="9.0"
+REP_BRANCH="10.0"
 # +-----------------------------------------------+
 # Possible Exports
 CCACHE_DIR=$BASE_SRC_DIR/CCACHE
