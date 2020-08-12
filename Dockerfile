@@ -95,6 +95,7 @@ RUN echo "build ALL=NOPASSWD: ALL" > /etc/sudoers.d/build
 ADD startup.sh /home/build/startup.sh
 RUN chmod a+x /home/build/startup.sh
 
+COPY gitconfig /home/build/.gitconfig
 COPY screenrc /home/build/.screenrc
 COPY bashrc /home/build/bashrc
 COPY build_me.sh /home/build/build_me.sh
