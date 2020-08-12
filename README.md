@@ -31,6 +31,9 @@ docker stop
     - stops the container. e.g docker stop gzr
 docker attach
     - attaches to the running container
+    [Note] For detaching you can use `^p^q`
+docker image prune -a
+    - removes all ununsed images, not just dangling ones
 ```
 
 
