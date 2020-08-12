@@ -14,8 +14,8 @@ ENV \
     CCACHE_DIR=/srv/ccache \
     USE_CCACHE=1 \
     CCACHE_COMPRESS=1 \
-    OUT_DIR="$HOME/out" \
-    CODE_DIR="$HOME/code" \
+    OUT_DIR=/home/build/out \
+    CODE_DIR=/home/build/code \
     BUILD_TYPE=$build_type \
     REP_URL=$repo_url \
     REP_BRANCH=$repo_branch \
