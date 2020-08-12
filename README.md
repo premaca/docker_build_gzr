@@ -69,6 +69,8 @@ ARGS -
     - -d <device_name> : Device code name to build for. e.g. oneplus3
     - clean : Builds clean, removes the OUT directory for this device
     - sync : Syncs repository
+
+    e.g ./build_me.sh -d oneplus3 clean sync
 ```
 ### BEFORE EVERYTHING ELSE - Setup Ecosystem for your builds
 #### Building GZOSP
@@ -76,42 +78,22 @@ ARGS -
 ```
 Edit "run.sh" with desired values.
 
-CCACHE_SIZE     - ccache size to be used. Default: 50G
-MAKE_JOBS       - make jobs, depends on your host system cores. Default : 8
+GIT_USER_NAME   - User name for GIT setup
+GIT_USER_EMAIL  - User email for GIT setup
 BUILD_TYPE      - gzosp. Default : gzosp
-BUILD_VARIANT   - Set the variant. Default : OFFICIAL
-BASE_SRC_DIR    - Base source directory, where GZOSP repo needs to be initialized
 CCACHE_DIR      - ccache directory
-BUILD_DIR       - Inner directory of BASE_SRC_DIR where GZOSP source is checkedout. Default : Gzosp
 OUT_DIR         - Output directory for build artifacts. Default : $BASE_SRC_DIR/out
 REPO_URL        - URL repo for GZOSP manifest. Default : "https://github.com/GZOSP/manifest.git"
 REPO_BRANCH     - Branch of GZOSP repo manifest. Default : "9.0"
+CODE_DIR        - Where the source is already/will be checked out
 ```
 
-#### Building VALIDUS
--> You should be inside Docker at /home/build
+#### Build Script Assumptions
 ```
-Edit "run.sh" with desired values.
-
-CCACHE_SIZE     - ccache size to be used. Default: 50G
-MAKE_JOBS       - make jobs, depends on your host system cores. Default : 8
-BUILD_TYPE      - validus. Default : gzosp
-BUILD_VARIANT   - Set the variant. Default : OFFICIAL
-BASE_SRC_DIR    - Base source directory, where VALIDUS repo needs to be initialized
-CCACHE_DIR      - ccache directory
-BUILD_DIR       - Inner directory of BASE_SRC_DIR where VALIDUS source is checkedout. Default : Val
-OUT_DIR         - Output directory for build artifacts. Default : $BASE_SRC_DIR/out
-REPO_URL        - URL repo for GZOSP manifest. Default : "https://github.com/ValidusOS/manifest.git"
-REPO_BRANCH     - Branch of GZOSP repo manifest. Default : "9.0"
+ccache size     - Default: 50G
+make jobs       - Retrieves the cpus from /proc/cpuinfo and uses it.
+source directory- Assumed to be of BUILD_TYPE, ".../gzosp"
 ```
-
-#### Setup GIT details for REPO SYNC and management
-```
--> You should be inside Docker
-git config --global user.email "yourmailid@domain.com"
-git config --global user.name "Your Name"
-```
-
 #### I'm Noob, Never built
 ```
 - Setup the Ecosystem as explained above
@@ -124,7 +106,7 @@ git config --global user.name "Your Name"
 
 #### I'm already building. How to automate
 ```
-- Assume your source code is at /home/user/Gzosp
+- Assume your source code is at /home/user/droid/gzosp
 - Setup the Ecosystem as explained above
 - Execute "./build_me.sh -d <device_name> sync"
     * This would sync the GZOSP/VALIDUS for any new changes
@@ -147,7 +129,7 @@ git config --global user.name "Your Name"
                                  |
                    --------------------------------
                    |                               |
-                Gzosp                            Validus
+                gzosp                            validus
 
 #### Output directory
                            OUT_DIR
@@ -158,7 +140,7 @@ git config --global user.name "Your Name"
                    |
            ---------------
            |             |
-        Gzosp         Validus
+        gzosp         validus
     ------------
           |
      target/out/...
@@ -172,7 +154,7 @@ git config --global user.name "Your Name"
                    |
            ---------------
            |             |
-        Gzosp         Validus
+        gzosp         validus
     ------------
           |
      CCACHE DATA
