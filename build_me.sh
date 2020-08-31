@@ -140,9 +140,9 @@ function build_me {
     fi
 
     ## Check build status
-    echo -e "Build completed. Check Zip File: $OUT_DIR/target/product/$DEVICE/[A-Za-z]*-$DEVICE-[A-Za-z0-9]*-$BUILD_DATE-*.zip"
+    echo -e "Build completed. Check Zip File: $OUT_DIR/target/product/$DEVICE/[A-Za-z]*-$DEVICE-*$BUILD_DATE-*.zip"
     echo -e "build_me: $bold *******************************************************" $nocol
-        exec_command ls ${OUT_DIR}/target/product/$DEVICE/[A-Za-z]*-$DEVICE-[A-Za-z0-9]*-$BUILD_DATE-*.zip
+        exec_command ls ${OUT_DIR}/target/product/$DEVICE/[A-Za-z]*-$DEVICE-*$BUILD_DATE-*.zip
     if [ "$?" -ne 0 ]; then
         echo -e "build_me: $bold Build for $DEVICE FAILED !!!!" $nocol
         echo -e "build_me: $bold *******************************************************" $nocol
